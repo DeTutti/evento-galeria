@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería del Evento</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #111; color: #fff; }
+    .upload-form { margin: 20px; }
+    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+    .gallery img { max-width: 200px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <h1>📸 Subí tu foto del evento</h1>
+  <form class="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="foto" accept="image/*" required>
+    <button type="submit">Subir</button>
+  </form>
+
+  <h2>Galería en vivo</h2>
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    async function cargarFotos() {
+      const res = await fetch('/fotos');
+      const fotos = await res.json();
+      const galeria = document.getElementById('gallery');
+      galeria.innerHTML = '';
+      fotos.forEach(foto => {
+        const img = document.createElement('img');
+        img.src = `/uploads/${foto}`;
+        galeria.appendChild(img);
+      });
+    }
+    setInterval(cargarFotos, 3000);
+    cargarFotos();
+  </script>
+</body>
+</html>
